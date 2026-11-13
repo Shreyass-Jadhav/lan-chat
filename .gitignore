@@ -1,0 +1,31 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# SQLite Database & Storage
+*.db
+*.sqlite
+*.sqlite3
+chat_database.db*
+
+# TLS Private Keys and Certificates
+cert.pem
+key.pem
+*.pem
+*.key
+*.crt
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# OS and Editor files
+.DS_Store
+Thumbs.db
+*.log
+
+# Temporary archives
+down.zip

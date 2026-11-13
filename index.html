@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content, viewport-fit=cover">
+<meta name="theme-color" content="#060c18">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>LAN Chat | Crystal Glass</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="css/style.css?v=2">
+</head>
+<body>
+<div id="auth">
+  <div class="auth-box glass">
+    <img class="logo" src="icon.svg" alt="">
+    <h1>LAN Chat</h1>
+    <p class="sub">Crystal Glass Local Network Messenger</p>
+    <div class="tabs"><button id="tab-login" class="active">Login</button><button id="tab-register">Register</button></div>
+    <div id="auth-error" class="err"></div>
+    <input id="a-user" placeholder="Username" autocomplete="username" autocapitalize="none">
+    <input id="a-pass" type="password" placeholder="Password" autocomplete="current-password">
+    <input id="a-invite" placeholder="Server invite code (optional)" autocomplete="off" autocapitalize="none" style="display:none">
+    <button id="a-submit" class="primary">Login</button>
+  </div>
+</div>
+
+<div id="app" hidden>
+  <aside id="side" class="glass">
+    <div id="me-bar"></div>
+    <nav id="rail"></nav>
+    <div id="side-head"></div>
+    <div id="side-list"></div>
+  </aside>
+
+  <main>
+    <div id="drop" hidden><div>&#128247;<br>Drop photo to send instantly</div></div>
+    <header class="glass">
+      <button id="menu-btn" class="icon" aria-label="Menu">&#9776;</button>
+      <div id="header-icon">#</div>
+      <div class="ht"><div id="title">LAN Chat</div><div id="meta"></div></div>
+      <div id="status"></div>
+      <button id="bg-btn" class="icon" aria-label="Wallpaper" title="Room Wallpaper" style="display:none">&#127912;</button>
+      <button id="members-btn" class="icon" aria-label="Members" title="Members">&#128101;</button>
+    </header>
+    <div id="msgs"></div>
+    <button id="down" class="primary" hidden aria-label="Jump to latest">&#8595;</button>
+    <div id="typing"></div>
+    <div id="reply-bar" hidden><div class="pill glass"><span id="reply-text"></span><button id="reply-x" class="icon" aria-label="Cancel reply">&#10005;</button></div></div>
+    <div id="input-bar" class="glass">
+      <button id="img-btn" class="icon" aria-label="Photo">&#128247;</button>
+      <button id="emoji-btn" class="icon" aria-label="Emoji">&#128512;</button>
+      <input type="file" id="file" accept="image/*" hidden>
+      <input id="msg" placeholder="Type a message&hellip;" autocomplete="off" enterkeyhint="send">
+      <button id="send" class="primary">Send</button>
+      <div id="emoji-picker" class="glass" hidden></div>
+    </div>
+  </main>
+
+  <aside id="members" class="glass" hidden></aside>
+  <div id="backdrop"></div>
+</div>
+
+<div id="overlay" hidden></div>
+<div id="viewer" hidden><img id="viewer-img" alt=""></div>
+<script src="js/app.js?v=2"></script>
+</body>
+</html>
