@@ -357,8 +357,17 @@ function showMemberProfile(u) {
 }
 
 // ---------- connection ----------
+function getWsUrl() {
+  const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+  // If running over tunnel / domain or port 8000, connect on the same port via /ws proxy
+  if (!location.port || location.port === '80' || location.port === '443' || location.port === '8000') {
+    return `${proto}://${location.host}/ws`;
+  }
+  return `${proto}://${location.hostname}:8001`;
+}
+
 function connect() {
-  ws = new WebSocket(`${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.hostname}:8001`);
+  ws = new WebSocket(getWsUrl());
   ws.onopen = () => {
     $('status').textContent = '';
     if (pending) { send({type: pending.mode, ...pending.c}); }

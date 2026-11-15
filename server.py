@@ -7,6 +7,8 @@ import http.server
 import socketserver
 import webbrowser
 import websockets
+import socket
+import select
 
 from config import HTTP_PORT, WS_PORT, MAX_MESSAGE_SIZE, BASE_DIR, get_lan_ip
 from database import Database
@@ -34,9 +36,49 @@ class QuietHandler(http.server.SimpleHTTPRequestHandler):
         return p in ("/", "/index.html", "/manifest.json", "/icon.svg", "/icon-192.png", "/icon-512.png") or p.startswith(("/css/", "/js/"))
 
     def do_GET(self):
+        if self.headers.get("Upgrade", "").lower() == "websocket":
+            self._proxy_websocket()
+            return
         if not self._allowed():
             return self.send_error(404)
         super().do_GET()
+
+    def _proxy_websocket(self):
+        self.close_connection = True
+        try:
+            ws_sock = socket.create_connection(("127.0.0.1", WS_PORT), timeout=5)
+        except Exception as exc:
+            self.send_error(502, f"WebSocket backend unavailable: {exc}")
+            return
+
+        raw = f"{self.command} {self.path} {self.request_version}\r\n"
+        for k, v in self.headers.items():
+            raw += f"{k}: {v}\r\n"
+        raw += "\r\n"
+
+        client_sock = self.connection
+        try:
+            ws_sock.sendall(raw.encode("latin1"))
+            sockets = [client_sock, ws_sock]
+            while True:
+                readable, _, exceptional = select.select(sockets, [], sockets, 30.0)
+                if exceptional:
+                    break
+                if not readable:
+                    continue
+                for s in readable:
+                    other = ws_sock if s is client_sock else client_sock
+                    data = s.recv(65536)
+                    if not data:
+                        return
+                    other.sendall(data)
+        except Exception:
+            pass
+        finally:
+            try:
+                ws_sock.close()
+            except Exception:
+                pass
 
     def do_HEAD(self):
         if not self._allowed():
